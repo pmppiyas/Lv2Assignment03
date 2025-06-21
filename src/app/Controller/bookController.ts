@@ -127,4 +127,23 @@ bookController.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
+// Update book by ID
+bookController.patch("/update/:id", async (req: Request, res: Response) => {
+  try {
+    const bookId = req.params.id;
+    const updateBody = req.body;
+    const updateBook = await Book.findByIdAndUpdate(bookId, updateBody, {
+      new: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Book updated successfully",
+      student: updateBook,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to update book" });
+  }
+});
+
 export default bookController;
