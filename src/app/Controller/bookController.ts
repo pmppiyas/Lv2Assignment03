@@ -146,4 +146,24 @@ bookController.patch("/update/:id", async (req: Request, res: Response) => {
   }
 });
 
+// Delete book by ID
+bookController.delete("/delete/:id", async (req: Request, res: Response) => {
+  try {
+    const bookId = req.params.id;
+    await Book.findByIdAndDelete(bookId);
+    res.status(200).json({
+      success: true,
+      message: "Book deleted successfully",
+      data: null,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      error: "Book delete failed from server",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
+
 export default bookController;
