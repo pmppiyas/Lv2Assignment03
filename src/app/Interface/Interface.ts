@@ -1,3 +1,5 @@
+import { Types, Model } from "mongoose";
+
 interface IBook {
   title: string;
   author: string;
@@ -8,4 +10,16 @@ interface IBook {
   avaiable: boolean;
 }
 
-export default IBook;
+interface IBorrow {
+  book: Types.ObjectId;
+  quantity: number;
+  dueDate: Date;
+}
+
+interface borrowModelType extends Model<IBorrow> {
+  borrowBook: (
+    this: Model<IBorrow>,
+    args: { book: Types.ObjectId; quantity: number; dueDate: Date }
+  ) => Promise<IBorrow>;
+}
+export type { IBook, IBorrow, borrowModelType };
