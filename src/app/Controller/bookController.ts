@@ -22,6 +22,7 @@ bookController.post("/create", async (req: Request, res: Response) => {
   }
 });
 
+// Get all books with filter, sort, pagination
 bookController.get("/books", async (req: Request, res: Response) => {
   try {
     const {
@@ -96,6 +97,33 @@ bookController.get("/books", async (req: Request, res: Response) => {
         message: error instanceof Error ? error.message : "Unknown error",
       });
     }
+  }
+});
+
+// Get book by ID
+bookController.get("/:id", async (req: Request, res: Response) => {
+  try {
+    const bookId = req.params.id;
+    const book = await Book.findById(bookId);
+
+    if (!book) {
+      res.status(404).json({
+        success: false,
+        message: "Book not found",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Book retrieved successfully",
+      data: book,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      error: "Book fetch failed from server",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 });
 
