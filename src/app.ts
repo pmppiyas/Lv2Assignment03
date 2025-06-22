@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from "express";
 import bookController from "./app/Controller/bookController";
+import borrowController from "./app/Controller/brorrowController";
 
 const app: Application = express();
 app.use(express.json());
@@ -9,7 +10,8 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to my Lvl 2 Assignment 3 Server...");
 });
 
-app.use("/book", bookController);
+app.use("/api/books", bookController);
+app.use("/api/borrow", borrowController);
 
 app.use((err: any, req: Request, res: Response, next: Function) => {
   const statusCode = err.status || 500;

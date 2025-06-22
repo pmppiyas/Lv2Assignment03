@@ -7,19 +7,19 @@ interface IBook {
   isbn: number;
   description: string;
   copies: number;
-  avaiable: boolean;
+  available: boolean;
 }
 
 interface IBorrow {
   book: Types.ObjectId;
   quantity: number;
-  dueDate: Date;
+  dueDate: string;
 }
 
 interface borrowModelType extends Model<IBorrow> {
   borrowBook: (
     this: Model<IBorrow>,
-    args: { book: Types.ObjectId; quantity: number; dueDate: Date }
+    args: { book: Types.ObjectId; quantity: number; dueDate: string }
   ) => Promise<IBorrow>;
 }
 export type { IBook, IBorrow, borrowModelType };

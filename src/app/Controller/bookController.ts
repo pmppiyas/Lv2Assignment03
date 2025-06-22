@@ -4,9 +4,7 @@ import { BookZod } from "../Zod_validation/Validation";
 
 const bookController: Router = express.Router();
 
-// Create book
-
-bookController.post("/create", async (req: Request, res: Response) => {
+bookController.post("/", async (req: Request, res: Response) => {
   try {
     const body = await BookZod.parseAsync(req.body);
     const book = await Book.create(body);
@@ -22,8 +20,7 @@ bookController.post("/create", async (req: Request, res: Response) => {
   }
 });
 
-// Get all books with filter, sort, pagination
-bookController.get("/books", async (req: Request, res: Response) => {
+bookController.get("/", async (req: Request, res: Response) => {
   try {
     const {
       filter,
@@ -100,7 +97,6 @@ bookController.get("/books", async (req: Request, res: Response) => {
   }
 });
 
-// Get book by ID
 bookController.get("/:id", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.id;
@@ -127,8 +123,7 @@ bookController.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-// Update book by ID
-bookController.patch("/update/:id", async (req: Request, res: Response) => {
+bookController.patch("/:id", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.id;
     const updateBody = req.body;
@@ -146,8 +141,7 @@ bookController.patch("/update/:id", async (req: Request, res: Response) => {
   }
 });
 
-// Delete book by ID
-bookController.delete("/delete/:id", async (req: Request, res: Response) => {
+bookController.delete("/:id", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.id;
     await Book.findByIdAndDelete(bookId);

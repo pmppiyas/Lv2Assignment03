@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IBook } from "../Interface/Interface";
+import { borrowModelType, IBook } from "../Interface/Interface";
 
 const bookSchema = new Schema<IBook>(
   {
@@ -34,7 +34,7 @@ const bookSchema = new Schema<IBook>(
       required: [true, "Copies field is required"],
       min: [0, "Copies must be a positive number"],
     },
-    avaiable: {
+    available: {
       type: Boolean,
       default: true,
     },
@@ -45,4 +45,34 @@ const bookSchema = new Schema<IBook>(
   }
 );
 
-export const Book = mongoose.model<IBook>("book", bookSchema);
+bookSchema.static("borrowBook", async function ({ book, quantity, dueDate }) {
+  const Book = mongoose.model("Book");
+  const BorrowModel = mongoose.model("Borrow");
+
+  const foundBook = await Book.findById(book);
+  if (!foundBook) {
+    throw new Error("Book not found");
+  }
+
+  if (foundBook.copies < quantity) {
+    throw new Error("Not enough copies available to borrow");
+  }
+
+  foundBook.copies -= quantity;
+  if (foundBook.copies === 0) {
+    foundBook.available = false;
+  } else {
+    foundBook.available = true;
+  }
+
+  await foundBook.save();
+
+  const borrowRecord = await BorrowModel.create({
+    book,
+    quantity,
+    dueDate,
+  });
+  return borrowRecord;
+});
+
+export const Book = mongoose.model<IBook, borrowModelType>("Book", bookSchema);
