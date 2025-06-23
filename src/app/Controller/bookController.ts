@@ -127,6 +127,19 @@ bookController.patch("/:id", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.id;
     const updateBody = req.body;
+
+    const foundBook = await Book.findById(bookId);
+
+    if (!foundBook) {
+      res.status(404).json({ error: "Book not found" });
+    }
+
+    if (updateBody.copies > 0) {
+      updateBody.available = true;
+    }
+    if (updateBody.copies === 0) {
+      updateBody.available = false;
+    }
     const updateBook = await Book.findByIdAndUpdate(bookId, updateBody, {
       new: true,
     });
