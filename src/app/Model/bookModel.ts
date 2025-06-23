@@ -75,4 +75,17 @@ bookSchema.static("borrowBook", async function ({ book, quantity, dueDate }) {
   return borrowRecord;
 });
 
+bookSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    console.log(`📚 New book added: ${this.title} by ${this.author}`);
+  } else {
+    console.log(`📚 Book updated: ${this.title} by ${this.author}`);
+  }
+  next();
+});
+
+bookSchema.post("save", function (doc) {
+  console.log(`📚 Book saved: ${doc.title} with ISBN ${doc.isbn}`);
+});
+
 export const Book = mongoose.model<IBook, borrowModelType>("Book", bookSchema);
