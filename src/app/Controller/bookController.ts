@@ -129,6 +129,7 @@ bookController.patch("/:id", async (req: Request, res: Response) => {
     const updateBody = req.body;
 
     const foundBook = await Book.findById(bookId);
+    console.log("Found book:", foundBook);
 
     if (!foundBook) {
       res.status(404).json({ error: "Book not found" });
