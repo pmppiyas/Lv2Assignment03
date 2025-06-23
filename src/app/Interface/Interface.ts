@@ -5,7 +5,7 @@ interface IBook {
   author: string;
   genre: string;
   isbn: number;
-  description: string;
+  description?: string;
   copies: number;
   available: boolean;
 }
