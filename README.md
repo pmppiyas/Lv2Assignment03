@@ -4,6 +4,7 @@ A full-featured RESTful API built with **Express.js**, **TypeScript**, and **Mon
 
 ---
 
+
 ## 🚀 Features
 
 - ✅ Create, read, update, and delete (CRUD) books
@@ -25,6 +26,9 @@ A full-featured RESTful API built with **Express.js**, **TypeScript**, and **Mon
 - **ODM:** Mongoose
 - **Validation:** Mongoose Schema Validation
 - **Dev Tools:** Nodemon, ts-node, dotenv
+
+---
+[![Live Site](https://img.shields.io/badge/View-Live-green)](https://lv2-assignment03.vercel.app)
 
 ---
 
