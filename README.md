@@ -3,8 +3,10 @@
 A full-featured RESTful API built with **Express.js**, **TypeScript**, and **MongoDB (via Mongoose)** to manage library books and borrowing operations.
 
 ---
+## 🔗 Live Link
+[![Live Site](https://img.shields.io/badge/View-Live-green)](https://lv2-assignment03.vercel.app)
 
-
+---
 ## 🚀 Features
 
 - ✅ Create, read, update, and delete (CRUD) books
@@ -15,6 +17,7 @@ A full-featured RESTful API built with **Express.js**, **TypeScript**, and **Mon
 - ✅ Mongoose static methods, instance methods, and middleware
 - ✅ Full TypeScript typing and validation
 - ✅ Proper error handling and standard response format
+- ✅ Use Zod validation for more clear input
 
 ---
 
@@ -26,9 +29,6 @@ A full-featured RESTful API built with **Express.js**, **TypeScript**, and **Mon
 - **ODM:** Mongoose
 - **Validation:** Mongoose Schema Validation
 - **Dev Tools:** Nodemon, ts-node, dotenv
-
----
-[![Live Site](https://img.shields.io/badge/View-Live-green)](https://lv2-assignment03.vercel.app)
 
 ---
 
