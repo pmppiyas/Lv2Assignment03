@@ -123,7 +123,7 @@ bookController.get("/:id", async (req: Request, res: Response) => {
   }
 });
 
-bookController.patch("/:id", async (req: Request, res: Response) => {
+bookController.put("/:id", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.id;
     const updateBody = req.body;

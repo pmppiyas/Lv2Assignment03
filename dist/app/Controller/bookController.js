@@ -121,10 +121,21 @@ bookController.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
 }));
-bookController.patch("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+bookController.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const bookId = req.params.id;
         const updateBody = req.body;
+        const foundBook = yield bookModel_1.Book.findById(bookId);
+        console.log("Found book:", foundBook);
+        if (!foundBook) {
+            res.status(404).json({ error: "Book not found" });
+        }
+        if (updateBody.copies > 0) {
+            updateBody.available = true;
+        }
+        if (updateBody.copies === 0) {
+            updateBody.available = false;
+        }
         const updateBook = yield bookModel_1.Book.findByIdAndUpdate(bookId, updateBody, {
             new: true,
         });
