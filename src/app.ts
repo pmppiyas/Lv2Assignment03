@@ -1,10 +1,18 @@
 import express, { Application, Request, Response } from "express";
+import cors from "cors";
 import bookController from "./app/Controller/bookController";
 import borrowController from "./app/Controller/brorrowController";
+import taskController from "./app/Controller/taskController";
 
 const app: Application = express();
 app.use(express.json());
 require("dotenv").config();
+app.use(
+  cors({
+    origin: "http://localhost:5174",
+    credentials: true,
+  })
+);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome to my Lvl 2 Assignment 3 Server...");
@@ -12,6 +20,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/books", bookController);
 app.use("/api/borrow", borrowController);
+app.use("/api/task", taskController);
 
 app.use((err: any, req: Request, res: Response, next: Function) => {
   const statusCode = err.status || 500;

@@ -22,4 +22,14 @@ interface borrowModelType extends Model<IBorrow> {
     args: { book: Types.ObjectId; quantity: number; dueDate: string }
   ) => Promise<IBorrow>;
 }
-export type { IBook, IBorrow, borrowModelType };
+
+interface ITask {
+  title: string;
+  description: string;
+  status: "pending" | "in-progress" | "completed";
+  priority: "low" | "medium" | "high";
+  deuDate: string;
+  createdAt: string;
+}
+
+export type { IBook, IBorrow, borrowModelType, ITask };
