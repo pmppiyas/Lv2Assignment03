@@ -10,7 +10,10 @@ const allowedGenres = [
 ];
 
 export const BookZod = z.object({
-  title: z.string().min(1, "Author is required").max(100, "Title is too long"),
+  title: z
+    .string()
+    .min(2, "Title is too short")
+    .max(100, "Title is too long"),
   author: z
     .string()
     .min(1, "Author is required")

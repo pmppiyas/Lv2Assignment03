@@ -1,12 +1,15 @@
-import express, { Request, Response, Router } from "express";
+import express from "express";
+import type { Request, Response } from "express";
 import { Book } from "../Model/bookModel";
 import { BookZod } from "../Zod_validation/Validation";
 
-const bookController: Router = express.Router();
+const bookController = express.Router();
 
 bookController.post("/", async (req: Request, res: Response) => {
   try {
     const body = await BookZod.parseAsync(req.body);
+    body.available = body.copies > 0;
+
     const book = await Book.create(body);
     res
       .status(201)
@@ -30,26 +33,36 @@ bookController.get("/", async (req: Request, res: Response) => {
       page = "1",
     } = req.query;
 
-    let filterObj = {};
-    if (filter) {
+    let filterObj: any = {};
+
+    if (filter && typeof filter === "string") {
       try {
-        if (typeof filter === "string") {
-          try {
-            filterObj = JSON.parse(filter);
-          } catch {
-            filterObj = { genre: filter.toUpperCase() };
+        const parsedFilter = JSON.parse(filter);
+
+        if (parsedFilter.genre) {
+          filterObj.genre = parsedFilter.genre.toUpperCase();
+        }
+
+        if (parsedFilter.search) {
+          const searchTerm = parsedFilter.search.trim();
+
+          if (/^\d+$/.test(searchTerm)) {
+            filterObj.isbn = searchTerm;
+          } else {
+            const searchRegex = new RegExp(searchTerm, "i");
+            filterObj.$or = [{ title: searchRegex }, { author: searchRegex }];
           }
         }
-      } catch (error) {
+      } catch (err) {
         res.status(400).json({
           success: false,
           error: "Invalid filter format",
-          message: "Filter parameter must be valid JSON or a genre string",
+          message: "Filter must be a valid JSON string",
         });
       }
     }
 
-    let sortObj: any = {};
+    const sortObj: any = {};
     if (sortBy) {
       sortObj[sortBy as string] = sort === "desc" ? -1 : 1;
     }
@@ -65,7 +78,6 @@ bookController.get("/", async (req: Request, res: Response) => {
     }
 
     const books = await query.limit(limitNum).skip(skip);
-
     const totalBooks = await Book.countDocuments(filterObj);
     const totalPages = Math.ceil(totalBooks / limitNum);
 
@@ -85,7 +97,7 @@ bookController.get("/", async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
 
     if (!res.headersSent) {
       res.status(500).json({
@@ -127,20 +139,14 @@ bookController.put("/:id", async (req: Request, res: Response) => {
   try {
     const bookId = req.params.id;
     const updateBody = req.body;
+    updateBody.available = updateBody.copies > 0;
 
     const foundBook = await Book.findById(bookId);
-    console.log("Found book:", foundBook);
 
     if (!foundBook) {
       res.status(404).json({ error: "Book not found" });
     }
 
-    if (updateBody.copies > 0) {
-      updateBody.available = true;
-    }
-    if (updateBody.copies === 0) {
-      updateBody.available = false;
-    }
     const updateBook = await Book.findByIdAndUpdate(bookId, updateBody, {
       new: true,
     });
