@@ -8,6 +8,7 @@ borrowController.post("/", async (req: Request, res: Response) => {
   try {
     const { book, quantity, dueDate } = req.body;
     const borrowRecord = await Book.borrowBook({ book, quantity, dueDate });
+    console.log(borrowRecord);
     res.status(201).json({
       success: true,
       message: "Book borrowed successfully",
@@ -51,6 +52,9 @@ borrowController.get("/", async (req: Request, res: Response) => {
           },
           totalQuantity: 1,
         },
+      },
+      {
+        $sort: { createdAt: 1 },
       },
     ]);
     res.status(200).json({
